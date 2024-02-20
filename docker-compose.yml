@@ -5,9 +5,9 @@ services:
           context: .
         restart: unless-stopped
         volumes:
-            - ./addons:/mnt/extra-addons/
-            - ./config/odoo:/etc/odoo/
-            - ./odoo-web-data:/var/lib/odoo/
+            - odoo-hmg-addons-5ad76303-812a-49e4-bf1d-66d349df4637:/mnt/extra-addons/
+            - odoo-hmg-conf-8a0804b7-45d6-447e-8a9f-a62ee8a4fde7:/etc/odoo/
+            - odoo-hmg-web-data-ae98af9f-eb4a-48b5-9cac-02dd40809583:/var/lib/odoo/
         ports:
             - "8069:8069"
         depends_on:
@@ -15,7 +15,7 @@ services:
 
     db:
       image: postgres:15
-      restart: always
+      restart: unless-stopped
       container_name: postgresql
       environment:
         - POSTGRES_PASSWORD=odoo
@@ -23,7 +23,7 @@ services:
         - POSTGRES_DB=odoo
         - PGDATA=/var/lib/postgresql/data/pgdata
       ports:
-        - "127.0.0.1:9432:5432"
+        - "9432:5432"
       volumes:
         - ./odoo-db-data:/var/lib/postgresql/data/pgdata
       logging:
@@ -33,5 +33,11 @@ services:
           max-file: "10"
 
 volumes:
-  odoo-web-data:
   odoo-db-data:
+  
+  odoo-hmg-addons-5ad76303-812a-49e4-bf1d-66d349df4637:
+    external: true
+  odoo-hmg-conf-8a0804b7-45d6-447e-8a9f-a62ee8a4fde7:
+    external: true
+  odoo-hmg-web-data-ae98af9f-eb4a-48b5-9cac-02dd40809583:
+    external: true
